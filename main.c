@@ -49,13 +49,13 @@ int main(int argc, char *argv[]) {
 
 	static struct option long_options[] =
 	{
-		{"apifile", required_argument, NULL, 'f'},
-		{"app", required_argument, NULL, 'a'},
-		{"priority", required_argument, NULL, 'p'},
-		{"event", required_argument, NULL, 'e'},
-		{"description", required_argument, NULL, 'd'},
-		{"verbose", no_argument, 0, 'v'},
-		{"help", no_argument, NULL, 'h'}
+		{"apifile",	required_argument,	0, 'f'},
+		{"app",		required_argument,	0, 'a'},
+		{"priority",	required_argument,	0, 'p'},
+		{"event",	required_argument,	0, 'e'},
+		{"description",	required_argument,	0, 'd'},
+		{"verbose",	no_argument,		0, 'v'},
+		{"help",	no_argument,		0, 'h'}
 	};
 
 	while (( getopts = getopt_long(argc, argv, "f:a:p:e:d:vh", long_options, &getopt_index)) != -1)
