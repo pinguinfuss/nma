@@ -21,7 +21,7 @@ void usage(char *argv0) {
 	printf("\n--app\n");
 	printf("\tName of the application submitting the notification.\n\tIf no value has been passed, it'll default to NMA-for-C.\n\tMax length: 256\n");
 	printf("\n--priority\n");
-	printf("\tPriority as an integer value\n\tPossible values: -2, ..., 2\n\tSee nma.h for the corresponding levels.\n");
+	printf("\tPriority of this notification.\n\tPossible values are: 2 (EMERGENCY), 1 (HIGH), 0 (NORMAL), -1 (MODERATE), -2 (LOW)\n");
 	printf("\n--event\n");
 	printf("\tSubject of the notification.\n\tMax length: 1000\n");
 	printf("\n--description\n");
@@ -38,9 +38,9 @@ void usage(char *argv0) {
 int main(int argc, char *argv[]) {
 
 	int getopts;
-	char *filename;
+	char filename[1000];
 	char *app;
-	unsigned int priority;
+	int priority;
 	char *event;
 	char *description;
 	char apikey[48];
@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
 				verbose = 1;
 				break;
 			case 'f':
-				filename = optarg;
+				strncpy(filename, optarg, sizeof(filename));
 				break;
 			case 'a':
 				app = optarg;
@@ -89,8 +89,8 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	if ( (filename == NULL) || (app == NULL) || (priority == NULL) ||
-			(event == NULL) || (description == NULL) )
+	if ( (filename == NULL) || (app == NULL) || (event == NULL) ||
+		       (description == NULL) || (priority < -2) || (priority > 2))
 	{
 		usage(argv[0]);
 		exit(1);
@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
 	{
 		printf("filename: %s\n", filename);
 		printf("app: %s\n", app);
-		printf("priority: %u\n", priority);
+		printf("priority: %i\n", priority);
 		printf("event: %s\n", event);
 		printf("description: %s\n", description);
 	}
