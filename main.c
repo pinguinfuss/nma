@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
 				filename = optarg;
 				break;
 			case 'a':
-			app = optarg;
+				app = optarg;
 				break;
 			case 'p':
 				priority = atoi(optarg);
