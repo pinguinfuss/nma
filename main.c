@@ -89,6 +89,13 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	if ( (filename == NULL) || (app == NULL) || (priority == NULL) ||
+			(event == NULL) || (description == NULL) )
+	{
+		usage(argv[0]);
+		exit(1);
+	}
+
 	if ( verbose > 0 )
 	{
 		printf("filename: %s\n", filename);
