@@ -13,7 +13,7 @@
 
 #define STRICT
 
-#define NMA_VERSION "0.1"
+#define NMA_VERSION "0.2"
 #define SSL_PORT 443
 #define HOSTNAME "www.notifymyandroid.com"
 #define MESSAGESIZE 11400
