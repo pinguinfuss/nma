@@ -1,5 +1,6 @@
 NotifyMyAndroid for C (by J. Dijkstra / abort@digitalise.net)
 Refactoring by Adriano Maia (adriano@usk.bz)
+Modifications by Christian Heim (christian.heim@barfoo.org)
 ---------------------
 
 This project requires the OpenSSL library and has been tested on Mac OS X (Snow Leopard), Windows XP Professional with SP3, Debian 5.0, Fedora 14 and CentOS.
