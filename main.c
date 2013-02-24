@@ -12,12 +12,12 @@
 #include <stdlib.h>
 #include <getopt.h>
 
-void usage() {
-	printf("nma, version: %s\n", NMA_VERSION);
+void usage(char *argv0) {
+	printf("%s, version: %s\n", argv0, NMA_VERSION);
 	printf("\n");
 	printf("Required arguments:\n");
 	printf("--apifile\n");
-	printf("\tPath to a the apikey file (see below)\n");
+	printf("\tPath to the API key file (see below)\n");
 	printf("\n--app\n");
 	printf("\tName of the application submitting the notification.\n\tIf no value has been passed, it'll default to NMA-for-C.\n\tMax length: 256\n");
 	printf("\n--priority\n");
@@ -26,6 +26,11 @@ void usage() {
 	printf("\tSubject of the notification.\n\tMax length: 1000\n");
 	printf("\n--description\n");
 	printf("\tNotification text.\n\tMax length: 10000\n");
+	printf("\nOther arguments:\n");
+	printf("--help\n");
+	printf("\tPrint this help message\n");
+	printf("\n--verbose\n");
+	printf("\tDisplay some debugging information.\n");
 	printf("\nThe API key configration file should look like this:\n");
 	printf("apikey = asehukf348cge1oxhd2ysvn06hlyq6y5kmzes604jr7fjdq7\n");
 }
@@ -40,6 +45,7 @@ int main(int argc, char *argv[]) {
 	char *description;
 	char apikey[48];
 	int verbose = 0;
+	int getopt_index = 0;
 
 	static struct option long_options[] =
 	{
@@ -52,79 +58,73 @@ int main(int argc, char *argv[]) {
 		{"help", no_argument, NULL, 'h'}
 	};
 
-	if ( argc == 1 )
+	while (( getopts = getopt_long(argc, argv, "f:a:p:e:d:vh", long_options, &getopt_index)) != -1)
 	{
-		usage();
-		exit(1);
+		switch (getopts)
+		{
+			case 'h':
+				usage(argv[0]);
+				exit(1);
+			case 'v':
+				verbose = 1;
+				break;
+			case 'f':
+				filename = optarg;
+				break;
+			case 'a':
+			app = optarg;
+				break;
+			case 'p':
+				priority = atoi(optarg);
+				break;
+			case 'e':
+				event = optarg;
+				break;
+			case 'd':
+				description = optarg;
+				break;
+			default:
+				usage(argv[0]);
+				exit(1);
+		}
+	}
+
+	if ( verbose > 0 )
+	{
+		printf("filename: %s\n", filename);
+		printf("app: %s\n", app);
+		printf("priority: %u\n", priority);
+		printf("event: %s\n", event);
+		printf("description: %s\n", description);
+	}
+
+	FILE *fp;
+	if (( fp=fopen(filename, "r")) == NULL)
+	{
+		printf("Unable to open config file: %s\n", filename);
+		return 1;
 	}
 	else
 	{
-		while (( getopts = getopt_long(argc, argv, "f:a:p:e:d", long_options, NULL)) != -1)
+		if ( fscanf(fp, "apikey = %s", &apikey) == 1 )
 		{
-			switch (getopts)
+			if ( verbose > 0 )
 			{
-				case 'h':
-					usage();
-					exit(1);
-				case 'v':
-					verbose = 1;
-					break;
-				case 'f':
-					filename = optarg;
-					break;
-				case 'a':
-					app = optarg;
-					break;
-				case 'p':
-					priority = atoi(optarg);
-					break;
-				case 'e':
-					event = optarg;
-					break;
-				case 'd':
-					description = optarg;
-					break;
-			}
-		}
-
-		if ( verbose > 0 )
-		{
-			printf("filename: %s\n", filename);
-			printf("app: %s\n", app);
-			printf("priority: %u\n", priority);
-			printf("event: %s\n", event);
-			printf("description: %s\n", description);
-		}
-
-		FILE *fp;
-
-		if (( fp=fopen(filename, "r")) == NULL)
-		{
-			printf("Unable to open config file: %s\n", filename);
-			return 1;
-		}
-		else
-		{
-			if ( fscanf(fp, "apikey = %s", &apikey) == 1 )
-			{
-				if ( verbose > 0 )
-				{
-					printf("apikey: %s\n", apikey);
-					printf("Return code: %d\n", nma_push_msg(apikey, priority, app, event, description));
-					return 0;
-				}
-				else
-				{
-					nma_push_msg(apikey, priority, app, event, description);
-					return 0;
-				}
+				printf("apikey: %s\n", apikey);
+				printf("Return code: %d\n", nma_push_msg(apikey, priority, app, event, description));
+				return 0;
 			}
 			else
 			{
-				printf("Invalid syntax config file: %s\n", filename);
-				return 1;
+				nma_push_msg(apikey, priority, app, event, description);
+				return 0;
 			}
 		}
-		fclose(fp);
+		else
+		{
+			printf("Invalid syntax config file: %s\n", filename);
+			return 1;
+		}
 	}
+	fclose(fp);
 }
