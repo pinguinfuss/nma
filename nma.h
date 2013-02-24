@@ -14,7 +14,7 @@
 #define STRICT
 
 #define SSL_PORT 443
-#define HOSTNAME "nma.usk.bz"
+#define HOSTNAME "www.notifymyandroid.com"
 #define MESSAGESIZE 11400
 #define BUFFERSIZE 512
 
