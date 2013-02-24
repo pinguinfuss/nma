@@ -13,14 +13,28 @@
 
 #define APP_NAME "NotifyMyAndroidExample"
 
-int main(int argc, char** argv) {	
+int main(int argc, char** argv) {
+	FILE * file = fopen( argv[1], "r");
+	char apikey[48];
+
 	if (argc < 4)
 	{
-		printf("Usage: nma <api_key> <priority-number> <event> <description>\n");
+		printf("Usage: nma /api/config/file <priority-number> <event> <description>\n");
+		printf("\nThe API key configration file should look like this:\n");
+		printf("apikey = asehukf348cge1oxhd2ysvn06hlyq6y5kmzes604jr7fjdq7\n");
+		return 1;
+	}
+
+	if ( fscanf(file, "apikey = %s", &apikey) == 1 )
+	{
+		printf("Return code: %d\n", nma_push_msg(apikey, atoi(argv[2]), APP_NAME, argv[3], argv[4]));
+		return 0;
+	}
+	else
+	{
+		printf("Unable to open/invalid syntax config file: %s", file);
 		return 1;
 	}
 	
-	printf("Return code: %d\n", nma_push_msg(argv[1], atoi(argv[2]), APP_NAME, argv[3], argv[4]));
 
-    return 0;
 }
