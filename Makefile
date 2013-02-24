@@ -2,8 +2,8 @@ CC=gcc
 
 LIBS=-lssl -lcrypto
 CFLAGS=-I.
-DEPS = nma.h
-OBJ = nma.o main.o 
+DEPS = nma.h inih.h
+OBJ = nma.o main.o inih.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $(LIBS) $<
