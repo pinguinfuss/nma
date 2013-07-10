@@ -24,8 +24,13 @@ LD		= @LD@
 nma: nma.o main.o
 	$(CC) $(CFLAGS) -o $@ $^
 
-install:
+install: nma
 	install -Dm 0755 nma $(DESTDIR)/bin/nma
+
+all: install
+
+clean:
+	rm *.o
 
 Makefile: Makefile.in ../config.status
 	cd .. && ./config.status $@
