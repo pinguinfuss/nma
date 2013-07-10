@@ -30,9 +30,6 @@ release:
 	rm -r $(distdir)
 	@echo "*** Archive $(distdir).tar.xz is ready for upload."
 
-nma:
-	$(CC) $(LIBS) -o $@ $^
-
 Makefile: Makefile.in config.status
 	./config.status $@
 
