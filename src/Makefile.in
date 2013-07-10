@@ -1,23 +1,13 @@
 # @configure_input@
 
-# Package-related substitution variables
-package        = @PACKAGE_NAME@
-version        = @PACKAGE_VERSION@
-tarname        = @PACKAGE_TARNAME@
-distdir        = $(tarname)-$(version)
-
 # Prefix-related substitution variables
-PREFIX		= @prefix@
-BINDIR		= @bindir@
+exec_prefix	= @prefix@
 
 # Compiler-related variables
 CC		= @CC@
 CFLAGS		= @CFLAGS@
-INCLUDES	= -I/usr/include
-LIBS		= -lssl -lcrypto
-
-# Linking-related variables
 LDFLAGS		= @LDFLAGS@
+LIBS		= -lssl -lcrypto
 
 SRCS		= nma.c main.c
 OBJS		= $(SRCS:.c=.o)
@@ -28,10 +18,10 @@ MAIN		= nma
 all: $(MAIN)
 
 $(MAIN): $(OBJS)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LFLAGS) $(LIBS)
+	$(CC) $(CFLAGS) -o $(MAIN) $(OBJS) $(LDFLAGS) $(LIBS)
 
 install: nma
-	$(INSTALL) install -Dm 0755 nma $(PREFIX)/bin/nma
+	$(INSTALL) install -Dm 0755 nma $(prefix)/bin/nma
 
 clean:
 	rm *.o
