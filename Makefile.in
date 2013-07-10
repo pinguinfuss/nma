@@ -1,0 +1,40 @@
+# @configure_input@
+
+# Package-related substitution variables
+package        = @PACKAGE_NAME@
+version        = @PACKAGE_VERSION@
+tarname        = @PACKAGE_TARNAME@
+distdir        = $(tarname)-$(version)
+
+# Prefix-related substitution variables
+prefix         = @prefix@
+exec_prefix    = @exec_prefix@
+bindir         = @bindir@
+
+clean:
+	rm -f configure config.* \
+		Makefile \
+		src/Makefile
+	rm -rf autom4te.cache
+
+release:
+	mkdir -p $(distdir)/src
+	cp configure $(distdir)
+	cp Makefile $(distdir)
+	cp AUTHORS NEWS README $(distdir)
+	cp src/Makefile $(distdir)/src
+	cp src/nma.c $(distdir)/src
+	cp src/nma.h $(distdir)/src
+	cp src/main.c $(distdir)/src
+	tar cJf $(distdir).tar.xz $(distdir)
+	rm -r $(distdir)
+	@echo "*** Archive $(distdir).tar.xz is ready for upload."
+
+nma:
+	$(CC) $(LIBS) -o $@ $^
+
+Makefile: Makefile.in config.status
+	./config.status $@
+
+config.status: configure
+	./config.status --recheck
