@@ -11,10 +11,10 @@ prefix         = @prefix@
 exec_prefix    = @exec_prefix@
 bindir         = @bindir@
 
-clean:
-	rm -rf autom4te.cache
-	rm -f config.h* config.log
-	cd src; $(MAKE) clean
+.PHONY: clean
+
+all:
+	cd src; make
 
 release:
 	mkdir -p $(distdir)/src
@@ -28,6 +28,11 @@ release:
 	tar cJf $(distdir).tar.xz $(distdir)
 	rm -r $(distdir)
 	@echo "*** Archive $(distdir).tar.xz is ready for upload."
+
+clean:
+	rm -rf autom4te.cache
+	rm -f config.h* config.log
+	cd src; $(MAKE) clean
 
 Makefile: Makefile.in config.status
 	./config.status $@
