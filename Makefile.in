@@ -19,19 +19,21 @@ all:
 release:
 	mkdir -p $(distdir)/src
 	cp configure $(distdir)
-	cp Makefile $(distdir)
+	cp Makefile.* $(distdir)
 	cp AUTHORS NEWS README $(distdir)
-	cp src/Makefile $(distdir)/src
+	cp configure $(distdir)
+	cp config.status $(distdir)
+	cp config.h.in $(distdir)
+	cp src/Makefile.* $(distdir)/src
 	cp src/nma.c $(distdir)/src
 	cp src/nma.h $(distdir)/src
 	cp src/main.c $(distdir)/src
 	tar cJf $(distdir).tar.xz $(distdir)
-	rm -r $(distdir)
 	@echo "*** Archive $(distdir).tar.xz is ready for upload."
 
 clean:
 	rm -rf autom4te.cache
-	rm -f config.h* config.log
+	rm -f config.log
 	cd src; $(MAKE) clean
 
 Makefile: Makefile.in config.status
