@@ -12,10 +12,9 @@ exec_prefix    = @exec_prefix@
 bindir         = @bindir@
 
 clean:
-	rm -f configure config.* \
-		Makefile
 	rm -rf autom4te.cache
-	rm -f src/Makefile src/*.o
+	rm -f config.h* config.log
+	cd src; $(MAKE) clean
 
 release:
 	mkdir -p $(distdir)/src

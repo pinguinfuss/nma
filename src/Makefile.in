@@ -7,30 +7,35 @@ tarname        = @PACKAGE_TARNAME@
 distdir        = $(tarname)-$(version)
 
 # Prefix-related substitution variables
-DESTDIR		= @DESTDIR@
 PREFIX		= @prefix@
 BINDIR		= @bindir@
 
 # Compiler-related variables
 CC		= @CC@
 CFLAGS		= @CFLAGS@
+INCLUDES	= -I/usr/include
+LIBS		= -lssl -lcrypto
 
 # Linking-related variables
-LD		= @LD@
+LDFLAGS		= @LDFLAGS@
 
-%.o: %.c nma.h
-	$(CC) $(INCLUDES) -c -o $@ $<
+SRCS		= nma.c main.c
+OBJS		= $(SRCS:.c=.o)
+MAIN		= nma
 
-nma: nma.o main.o
-	$(CC) $(CFLAGS) -o $@ $^
+.PHONY:	clean
+
+all: $(MAIN) install
+
+$(MAIN): $(OBJS)
+	$(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LFLAGS) $(LIBS)
 
 install: nma
-	install -Dm 0755 nma $(DESTDIR)/bin/nma
-
-all: install
+	install -Dm 0755 nma $(PREFIX)/bin/nma
 
 clean:
 	rm *.o
+	rm $(MAIN)
 
 Makefile: Makefile.in ../config.status
 	cd .. && ./config.status $@
