@@ -14,7 +14,10 @@ bindir         = @bindir@
 .PHONY: clean
 
 all:
-	cd src; make
+	cd src; $(MAKE)
+
+install:
+	cd src; $(MAKE) install
 
 release:
 	mkdir -p $(distdir)/src

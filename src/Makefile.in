@@ -25,13 +25,13 @@ MAIN		= nma
 
 .PHONY:	clean
 
-all: $(MAIN) install
+all: $(MAIN)
 
 $(MAIN): $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LFLAGS) $(LIBS)
 
 install: nma
-	install -Dm 0755 nma $(PREFIX)/bin/nma
+	$(INSTALL) install -Dm 0755 nma $(PREFIX)/bin/nma
 
 clean:
 	rm *.o
