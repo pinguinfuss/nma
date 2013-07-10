@@ -1,0 +1,34 @@
+# @configure_input@
+
+# Package-related substitution variables
+package        = @PACKAGE_NAME@
+version        = @PACKAGE_VERSION@
+tarname        = @PACKAGE_TARNAME@
+distdir        = $(tarname)-$(version)
+
+# Prefix-related substitution variables
+DESTDIR		= @DESTDIR@
+PREFIX		= @prefix@
+BINDIR		= @bindir@
+
+# Compiler-related variables
+CC		= @CC@
+CFLAGS		= @CFLAGS@
+
+# Linking-related variables
+LD		= @LD@
+
+%.o: %.c nma.h
+	$(CC) $(INCLUDES) -c -o $@ $<
+
+nma: nma.o main.o
+	$(CC) $(CFLAGS) -o $@ $^
+
+install:
+	install -Dm 0755 nma $(DESTDIR)/bin/nma
+
+Makefile: Makefile.in ../config.status
+	cd .. && ./config.status $@
+
+config.status: configure
+	cd .. && ./config.status --recheck
