@@ -13,9 +13,9 @@ bindir         = @bindir@
 
 clean:
 	rm -f configure config.* \
-		Makefile \
-		src/Makefile
+		Makefile
 	rm -rf autom4te.cache
+	rm -f src/Makefile src/*.o
 
 release:
 	mkdir -p $(distdir)/src
